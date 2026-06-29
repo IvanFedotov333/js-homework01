@@ -8,27 +8,52 @@ let service1 = prompt("Какой дополнительный тип услуг
 let servicePrice1 = +prompt("Сколько это будет стоить?");
 let service2 = prompt("Какой ещё дополнительный тип услуги нужен?");
 let servicePrice2 = +prompt("Сколько это будет стоить?");
-const totalPrice = screenPrice + servicePrice1 + servicePrice2;
+let totalPrice = screenPrice + servicePrice1 + servicePrice2;
 let agentPercent = 10; // процент комиссии
 let agentFee = (totalPrice * agentPercent) / 100; // откат посреднику
-const servicePercentPrice = Math.ceil(totalPrice - agentFee);
+let servicePercentPrice = getServicePercentPrices();
 console.log(`Общая цена услуги - ${servicePercentPrice} рублей`);
+const showTypeOf = function (variable) {
+  console.log(variable, typeof variable);
+};
+const getRollbackMessage = function (price) {
+  if (price > 30000) {
+    return "Даем скидку в 10%";
+  } else if (price > 15000 && price <= 30000) {
+    return "Даем скидку в 5%";
+  } else {
+    return "Скидка не предусмотрена";
+  }
+};
 
-if (totalPrice > 30000) {
-  console.log("Даем скидку в 10%");
-} else if (15000 < totalPrice && totalPrice < 30000) {
-  console.log("Даем скидку в 5%");
-} else {
-  console.log("Скидка не предусмотрена");
+const getAllServicePrices = function () {
+  return servicePrice1 + servicePrice2;
+};
+
+const allServicePrices = getAllServicePrices();
+const fullPrice = getFullPrice();
+
+function getFullPrice() {
+  return screenPrice + allServicePrices;
 }
 
-console.log(typeof title);
-console.log(typeof fullPrice);
-console.log(typeof adaptive);
+function getTitle() {
+  const trimmed = title.trim();
+  return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
+}
 
-console.log(screens.length);
-console.log(servicePercentPrice);
+function getServicePercentPrices() {
+  return Math.ceil(totalPrice - agentFee);
+}
 
-console.log(
-  `Стоимость вёрстки экранов ${screenPrice} рублей/ долларов/гривен/юани`,
-);
+showTypeOf(title);
+showTypeOf(screenPrice);
+showTypeOf(adaptive);
+
+console.log(String(screens));
+
+console.log(getRollbackMessage(totalPrice));
+console.log(getServicePercentPrices());
+
+
+
