@@ -12,6 +12,10 @@ let service1;
 let service2;
 
 const isNum = function (num) {
+  if (num === null || String(num).trim() === "") {
+    return false;
+  }
+
   return !isNaN(parseFloat(num)) && isFinite(num);
 };
 
@@ -19,9 +23,12 @@ const asking = function () {
   title = prompt("Как называется ваш проект?", "Калькулятор вёрстки");
   screens = prompt("Какие типы экранов нужно разработать?", "Простые, Сложные");
 
+  let userInput;
+
   do {
-    screenPrice = +prompt("Сколько будет стоить данная работа?");
-  } while (!isNum(screenPrice));
+    userInput = prompt("Сколько будет стоить данная работа?");
+  } while (!isNum(userInput));
+  screenPrice = Number(userInput.trim());
 
   adaptive = confirm("Нужен ли адаптив на сайте?");
 };
@@ -34,10 +41,14 @@ const getAllServicePrices = function () {
     } else if (i === 1) {
       service2 = prompt("Какой ещё дополнительный тип услуги нужен?");
     }
-    let price;
+
+    let userPrice;
+    
     do {
-      price = +prompt("Сколько это будет стоить?");
-    } while (!isNum(price));
+      userPrice = prompt("Сколько это будет стоить?");
+    } while (!isNum(userPrice));
+
+    let price = Number(userPrice.trim());
     sum += price;
   }
   return sum;
