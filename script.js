@@ -19,11 +19,9 @@ const asking = function () {
   title = prompt("Как называется ваш проект?", "Калькулятор вёрстки");
   screens = prompt("Какие типы экранов нужно разработать?", "Простые, Сложные");
 
-  screenPrice = prompt("Сколько будет стоить данная работа?");
-
-  while (!isNum(screenPrice)) {
-    screenPrice = prompt("Сколько будет стоить данная работа?");
-  }
+  do {
+    screenPrice = +prompt("Сколько будет стоить данная работа?");
+  } while (!isNum(screenPrice));
 
   adaptive = confirm("Нужен ли адаптив на сайте?");
 };
@@ -36,10 +34,13 @@ const getAllServicePrices = function () {
     } else if (i === 1) {
       service2 = prompt("Какой ещё дополнительный тип услуги нужен?");
     }
-    sum += +prompt("Сколько это будет стоить?");
+    let price;
+    do {
+      price = +prompt("Сколько это будет стоить?");
+    } while (!isNum(price));
+    sum += price;
   }
   return sum;
-  // return servicePrice1 + servicePrice2;
 };
 
 const showTypeOf = function (variable) {
