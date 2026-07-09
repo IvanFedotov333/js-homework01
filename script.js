@@ -1,112 +1,95 @@
 "use strict";
 
-let title;
-let screens;
-let screenPrice;
-let adaptive;
-let agentFee = 10;
-let allServicePrices;
-let totalPrice;
-let servicePercentPrice;
-let service1;
-let service2;
+const appData = {
+  title: "",
+  screens: "",
+  screenPrice: 0,
+  adaptive: true,
+  agentFee: 10,
+  allServicePrices: 0,
+  totalPrice: 0,
+  servicePercentPrice: 0,
+  service1: "",
+  service2: "",
+  asking: function () {
+    appData.title = prompt("Как называется ваш проект?", "Калькулятор вёрстки");
+    appData.screens = prompt(
+      "Какие типы экранов нужно разработать?",
+      "Простые, Сложные",
+    );
 
-const isNum = function (num) {
-  if (num === null || String(num).trim() === "") {
-    return false;
-  }
+    let userInput;
 
-  return !isNaN(parseFloat(num)) && isFinite(num);
-};
+    do {
+      userInput = prompt("Сколько будет стоить данная работа?");
+    } while (!appData.isNum(userInput));
+    appData.screenPrice = Number(userInput.trim());
 
-const asking = function () {
-  title = prompt("Как называется ваш проект?", "Калькулятор вёрстки");
-  screens = prompt("Какие типы экранов нужно разработать?", "Простые, Сложные");
-
-  let userInput;
-
-  do {
-    userInput = prompt("Сколько будет стоить данная работа?");
-  } while (!isNum(userInput));
-  screenPrice = Number(userInput.trim());
-
-  adaptive = confirm("Нужен ли адаптив на сайте?");
-};
-
-const getAllServicePrices = function () {
-  let sum = 0;
-  for (let i = 0; i < 2; i++) {
-    if (i === 0) {
-      service1 = prompt("Какой дополнительный тип услуги нужен?");
-    } else if (i === 1) {
-      service2 = prompt("Какой ещё дополнительный тип услуги нужен?");
+    appData.adaptive = confirm("Нужен ли адаптив на сайте?");
+  },
+  isNum: function (num) {
+    if (num === null || String(num).trim() === "") {
+      return false;
     }
 
-    let userPrice;
-    
-    do {
-      userPrice = prompt("Сколько это будет стоить?");
-    } while (!isNum(userPrice));
+    return !isNaN(parseFloat(num)) && isFinite(num);
+  },
+  getAllServicePrices: function () {
+    let sum = 0;
+    for (let i = 0; i < 2; i++) {
+      if (i === 0) {
+        appData.service1 = prompt("Какой дополнительный тип услуги нужен?");
+      } else if (i === 1) {
+        appData.service2 = prompt("Какой ещё дополнительный тип услуги нужен?");
+      }
 
-    let price = Number(userPrice.trim());
-    sum += price;
-  }
-  return sum;
+      let userPrice;
+
+      do {
+        userPrice = prompt("Сколько это будет стоить?");
+      } while (!appData.isNum(userPrice));
+
+      let price = Number(userPrice.trim());
+      sum += price;
+    }
+    return sum;
+  },
+  getFullPrice: function () {
+    return appData.screenPrice + appData.allServicePrices;
+  },
+  getServicePercentPrices: function () {
+    return Math.ceil(
+      appData.totalPrice - appData.totalPrice * (appData.agentFee / 100),
+    );
+  },
+  getTitle: function () {
+    return (
+      appData.title.trim()[0].toUpperCase() +
+      appData.title.trim().substring(1).toLowerCase()
+    );
+  },
+  getRollbackMessage: function (price) {
+    if (price >= 30000) {
+      return "Даем скидку в 10%";
+    } else if (price >= 15000 && price < 30000) {
+      return "Даем скидку в 5%";
+    } else {
+      return "Скидка не предусмотрена";
+    }
+  },
+  start: function () {
+    appData.asking();
+    appData.allServicePrices = appData.getAllServicePrices();
+    appData.totalPrice = appData.getFullPrice();
+    appData.servicePercentPrice = appData.getServicePercentPrices();
+    appData.title = appData.getTitle();
+    appData.logger();
+  },
+  logger: function () {
+    for (let key in appData) {
+      console.log(key + ": " + appData[key]);
+    }
+  },
 };
 
-const showTypeOf = function (variable) {
-  console.log(variable, typeof variable);
-};
-
-const getFullPrice = function () {
-  return screenPrice + allServicePrices;
-};
-
-const getServicePercentPrices = function () {
-  return Math.ceil(totalPrice - totalPrice * (agentFee / 100));
-};
-
-const getTitle = function () {
-  return (
-    title.trim()[0].toUpperCase() + title.trim().substring(1).toLowerCase()
-  );
-};
-
-const getRollbackMessage = function (price) {
-  if (price >= 30000) {
-    return "Даем скидку в 10%";
-  } else if (price >= 15000 && price < 30000) {
-    return "Даем скидку в 5%";
-  } else {
-    return "Скидка не предусмотрена";
-  }
-};
-
-asking();
-allServicePrices = getAllServicePrices();
-totalPrice = getFullPrice();
-servicePercentPrice = getServicePercentPrices();
-title = getTitle();
-
-showTypeOf(title);
-showTypeOf(screenPrice);
-showTypeOf(adaptive);
-
-console.log("allServicePrices", allServicePrices);
-
-console.log(getRollbackMessage(totalPrice));
-console.log(typeof title);
-console.log(typeof screenPrice);
-console.log(typeof adaptive);
-
-console.log(screens.length);
-console.log(servicePercentPrice);
-
-console.log(
-  "Стоимость вёрстки экранов " +
-    screenPrice +
-    " юани" +
-    " Стоимость разработки сайта " +
-    totalPrice +
-    " юани",
-);
+appData.start();
