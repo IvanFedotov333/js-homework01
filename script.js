@@ -58,8 +58,9 @@ const appData = {
       do {
         name = prompt("Какой дополнительный тип услуги нужен?");
       } while (!appData.isValidText(name));
+      name = name.trim();
+      
       let price;
-
       do {
         price = prompt("Сколько это будет стоить?");
       } while (!appData.isNum(price));
