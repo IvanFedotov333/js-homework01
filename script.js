@@ -44,7 +44,6 @@ const appData = {
       name = name.trim();
 
       let price;
-
       do {
         price = prompt("Сколько будет стоить данная работа?");
       } while (!appData.isNum(price));
@@ -58,22 +57,34 @@ const appData = {
       do {
         name = prompt("Какой дополнительный тип услуги нужен?");
       } while (!appData.isValidText(name));
-      let price;
+      name = name.trim();
 
+      let price;
       do {
         price = prompt("Сколько это будет стоить?");
       } while (!appData.isNum(price));
       price = +price;
 
-      appData.services[name] = price;
+      let nameId = name;
+      if (appData.services.hasOwnProperty(nameId)) {
+        let counter = 1;
+        do {
+          nameId = name + " (" + counter + ")";
+          counter++;
+        } while (appData.services.hasOwnProperty(nameId));
+      }
+      appData.services[nameId] = price;
     }
 
     appData.adaptive = confirm("Нужен ли адаптив на сайте?");
   },
   addPrices: function () {
-    for (let screen of appData.screens) {
-      appData.screenPrice += +screen.price;
-    }
+    appData.screenPrice = appData.screens.reduce(function (total, screen) {
+      return total + +screen.price;
+    }, 0);
+
+    appData.allServicePrices = 0;
+
     for (let key in appData.services) {
       appData.allServicePrices += appData.services[key];
     }
