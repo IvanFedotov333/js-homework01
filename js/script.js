@@ -1,5 +1,22 @@
 "use strict";
 
+const mainTitle = document.getElementsByTagName("h1")[0];
+const buttons = document.getElementsByClassName("handler_btn");
+const calcButton = buttons[0];
+const resetButton = buttons[1];
+const addScreenButton = document.querySelector(".screen-btn");
+const percentItems = document.querySelectorAll(".other-items.percent");
+const numberItems = document.querySelectorAll(".other-items.number");
+const rollbackRange = document.querySelector(".rollback input[type='range']");
+const rollbackValue = document.querySelector(".rollback .range-value");
+const totalInputs = document.getElementsByClassName("total-input");
+const totalLayout = totalInputs[0]; // Стоимость верстки
+const totalScreens = totalInputs[1]; // Количество экранов
+const totalServices = totalInputs[2]; // Стоимость доп. услуг
+const totalFullprice = totalInputs[3]; // Итоговая стоимость
+const totalRollback = totalInputs[4]; // Стоимость с учетом отката
+let screenBlocks = document.querySelectorAll(".screen");
+
 const appData = {
   title: "",
   screens: [],
