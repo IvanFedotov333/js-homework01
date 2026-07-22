@@ -24,6 +24,7 @@ const appData = {
   screens: [],
   screenPrice: 0,
   adaptive: true,
+  calculationDone: false,
   agentFee: 10,
   servicePricesPercent: 0,
   servicePricesNumber: 0,
@@ -38,6 +39,12 @@ const appData = {
     rollbackRange.addEventListener("input", function () {
       rollbackValue.textContent = rollbackRange.value + "%";
       appData.rollback = +rollbackRange.value;
+
+      if (appData.calculationDone) {
+        totalCountRollback.value = Math.ceil(
+          appData.totalPrice - appData.totalPrice * (appData.rollback / 100),
+        );
+      }
     });
   },
   addTitle: function () {
@@ -53,6 +60,7 @@ const appData = {
 
     // appData.logger();
     appData.showResult();
+    appData.calculationDone = true;
   },
   showResult: function () {
     total.value = appData.screenPrice;
