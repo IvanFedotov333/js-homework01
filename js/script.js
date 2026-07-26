@@ -25,6 +25,7 @@ const appData = {
   screenPrice: 0,
   adaptive: true,
   calculationDone: false,
+  cmsPercent: 0,
   agentFee: 10,
   servicePricesPercent: 0,
   servicePricesNumber: 0,
@@ -34,6 +35,7 @@ const appData = {
   servicesNumber: {},
   init: function () {
     this.addTitle();
+    this.initCmsToggle();
     startBtn.addEventListener("click", this.start.bind(this));
     resetBtn.addEventListener("click", this.reset.bind(this));
     addScreenButton.addEventListener("click", this.addScreenBlock.bind(this));
@@ -88,6 +90,25 @@ const appData = {
     totalCountOther.value = 0;
     totalCountRollback.value = 0;
     fullTotalCount.value = 0;
+    this.cmsPercent = 0;
+    const cmsCheckbox = document.querySelector("#cms-open");
+    if (cmsCheckbox) {
+      cmsCheckbox.checked = false;
+    }
+    const cmsBlock = document.querySelector(".hidden-cms-variants");
+    if (cmsBlock) {
+      cmsBlock.style.display = "none";
+    }
+    const cmsSelect = document.querySelector("#cms-select");
+    if (cmsSelect) {
+      cmsSelect.value = "";
+    }
+    const cmsOtherInput = document.querySelector(
+      ".hidden-cms-variants .main-controls__input",
+    );
+    if (cmsOtherInput) {
+      cmsOtherInput.style.display = "none";
+    }
   },
   showResult: function () {
     total.value = this.screenPrice;
@@ -174,7 +195,7 @@ const appData = {
     }
     this.totalPrice =
       +this.screenPrice + this.servicePricesNumber + this.servicePricesPercent;
-
+    this.totalPrice += this.totalPrice * (this.cmsPercent / 100);
     totalCount.value = totalScreenCount;
 
     totalCountRollback.value = Math.ceil(
@@ -200,6 +221,30 @@ const appData = {
     });
     startBtn.style.display = "";
     resetBtn.style.display = "none";
+  },
+  initCmsToggle: function () {
+    const checkboxCms = document.querySelector("#cms-open");
+    const cmsBlock = document.querySelector(".hidden-cms-variants");
+    checkboxCms.addEventListener("change", () => {
+      if (checkboxCms.checked) {
+        cmsBlock.style.display = "flex";
+      } else {
+        cmsBlock.style.display = "none";
+      }
+    });
+    const selectList = document.querySelector("#cms-select");
+    selectList.addEventListener("change", () => {
+      const selectItem = cmsBlock.querySelector(".main-controls__input");
+      let percentValue = 0;
+      if (selectList.value === "other") {
+        selectItem.style.display = "flex";
+        percentValue = +selectItem.value;
+      } else {
+        selectItem.style.display = "none";
+        percentValue = +selectList.value;
+      }
+      this.cmsPercent = percentValue;
+    });
   },
 };
 
